@@ -24,21 +24,27 @@ int		ft_mouse_move(int x, int y, t_mlx *mlx)
 
 int		ft_mouse_pressed(int butm, int x, int y, t_mlx *mlx)
 {
+	double deltax;
+	double deltay;
+
 	if (butm == 5 && INSIDE(x, y))
 	{
-		if (mlx->wnd->absy < 1 && mlx->wnd->absx < 2)
-		{
-			mlx->wnd->startx += x;
-			mlx->wnd->startx += y;
-		}
+		deltax = mlx->wnd->len_x * 0.1;
+		mlx->wnd->len_x = mlx->wnd->len_x * 0.9;
+		deltay = mlx->wnd->len_y * 0.1;
+		mlx->wnd->len_y = mlx->wnd->len_y * 0.9;
+		mlx->wnd->startx = mlx->wnd->startx + deltax * ((double)x/(WX - 1));
+		mlx->wnd->starty = mlx->wnd->starty - deltay * ((double)y/(WY - 1));
 	}
 	if (butm == 4 && INSIDE(x, y))
 	{
-		if (mlx->wnd->absy > 0 && mlx->wnd->absx > 0)
-		{
-			mlx->wnd->startx -= x;
-			mlx->wnd->startx -= y;
-		}
+		deltax = mlx->wnd->len_x * 0.1;
+		mlx->wnd->len_x = mlx->wnd->len_x * 1.1;
+		deltay = mlx->wnd->len_y * 0.1;
+		mlx->wnd->len_y = mlx->wnd->len_y * 1.1;
+		mlx->wnd->startx = mlx->wnd->startx - deltax * ((double)x/(WX - 1));
+		mlx->wnd->starty = mlx->wnd->starty + deltay * ((double)y/(WY - 1));
+
 	}
 	ft_draw_fractal(mlx);
 	return (0);

@@ -56,37 +56,81 @@ int		ft_test(t_dot dot)
 		return(rgb_to_int(50+ (1 * iter),0 + (2 * iter) ,50 + 2 * iter));
 }
 
-static void		draw(t_wnd *wnd)
+int		ft_julia(t_dot dot)
 {
-	int			*image;
-	int			i;
-	double		x;
-	double		y;
+	t_dot 	cp;
+	int		iter = 0;
 
-	i = 0;
-	x = wnd->startx;
-	y = wnd->starty;
-	wnd->absx =	wnd->finishx - wnd->startx;
-	wnd->absy = wnd->starty - wnd->finishy;
-	wnd->stepx = wnd->absx / WX;
-	wnd->stepy = wnd->absy / WY;
-	image = (int *)(wnd->data_addr);
-	while (i < (WY * WX))
+	cp.x = 0;
+	cp.y = 0;
+	while (iter < 100 && ft_inside(cp))
 	{
-		if (i % WX == 0 && i != 0)
+		cp = ft_add(ft_quadro(cp), dot);
+		iter++;
+	}
+	if (ft_inside(cp))
+		return(BACKGROUND);
+	else if (iter > 0 && iter < 50)
+		return(rgb_to_int(10,0 + (2 * iter) ,0 + 3 * iter));
+	else
+		return(rgb_to_int(50 + (1 * iter),0 + (2 * iter) ,50 + 2 * iter));
+}
+
+void 		*thread_function(void *func)
+{
+	int 	*image;
+	int 	i;
+	double 	x;
+	double 	y;
+	t_wnd 	*wnd;
+
+	wnd = (t_wnd *)func;
+	wnd->stepx = wnd->len_x / WX;
+	wnd->stepy = wnd->len_y / WY;
+	y = wnd->starty - wnd->sty * wnd->stepy;
+	image = (int *) (wnd->data_addr);
+	while (wnd->sty < wnd->endy)
+	{
+		i = 0;
+		x = wnd->startx;
+		while (i < WX)
 		{
-			y = y - wnd->stepy;
-			x = wnd->startx;
-		}
-		else
 			x = x + wnd->stepx;
-		image[i] = ft_test((t_dot){x, y});
-		i++;
+			image[i+wnd->sty * WX] = ft_test((t_dot) {x, y});
+		//	image[i+wnd->sty * WX] = ft_julia((t_dot){-0.70176, -0.3842});
+			i++;
+		}
+		y = y - wnd->stepy;
+		wnd->sty++;
+	}
+	return (NULL);
+}
+
+void		ft_multi_thread(t_wnd *scene)
+{
+	pthread_t	id[NUM_THREAD];
+	t_wnd		data[NUM_THREAD];
+	int			n;
+
+	n = 0;
+	while (n < NUM_THREAD)
+	{
+		data[n] = *scene;
+		data[n].sty = n * WY / NUM_THREAD;
+		data[n].endy = (n + 1) * WY / NUM_THREAD;
+		pthread_create(&id[n], NULL, thread_function, &data[n]);
+		n += 1;
+	}
+	n = 0;
+	while (n < NUM_THREAD)
+	{
+		pthread_join(id[n], NULL);
+		n += 1;
 	}
 }
 
 void 	ft_draw_fractal(t_mlx *mlx)
 {
-	draw(mlx->wnd);
+	ft_multi_thread(mlx->wnd);
 	mlx_put_image_to_window(mlx->wnd->ptr, mlx->wnd->wnd, mlx->wnd->img, 0, 0);
 }

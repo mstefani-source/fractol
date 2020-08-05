@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/mstefani/fractol/fractol.h
+fcntl.h
+-
+mlx.h
+-
+stdio.h
+-
+stdlib.h
+-
+zconf.h
+-
+libft.h
+/Users/mstefani/fractol/libft.h
+math.h
+-
+pthread.h
+-
+keys.h
+/Users/mstefani/fractol/keys.h
+
+/Users/mstefani/fractol/keys.h
+
+/Users/mstefani/fractol/libft.h
+string.h
+-
+unistd.h
+-
+stdlib.h
+-
+limits.h
+-
+
+/Users/mstefani/fractol/src/ft_draw_fractal.c
+../fractol.h
+/Users/mstefani/fractol/fractol.h
+
+/usr/local/include/mlx.h
+

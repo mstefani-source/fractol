@@ -19,9 +19,10 @@
 # include <zconf.h>
 # include "libft.h"
 # include <math.h>
+# include <pthread.h>
 # include "keys.h"
-# define WX 800
-# define WY 400
+# define WX 1600
+# define WY 800
 # define RED 0xff0000
 # define BACKGROUND 0x222222
 # define COLOR_DEFAULT_MIN 0x00FF00
@@ -30,6 +31,7 @@
 # define INSIDE(x, y) ((x > 0 && y > 0 && x < WX && y < WY) ? 1 : 0)
 # define STEP(a, b) ((a < b) ? 1 : -1)
 # define STEPZ 5
+# define NUM_THREAD 8
 
 typedef struct		s_mouse
 {
@@ -51,14 +53,16 @@ typedef struct		s_wnd
 	int				bit_per_pixel;
 	int				size_line;
 	int				endian;
-	double 			absx;
-	double 			absy;
+	double 			len_x;
+	double 			len_y;
 	double 			stepx;
 	double 			stepy;
 	double			startx;
 	double			finishx;
 	double			starty;
 	double 			finishy;
+	int 			sty;
+	int 			endy;
 }					t_wnd;
 
 typedef struct		s_mlx

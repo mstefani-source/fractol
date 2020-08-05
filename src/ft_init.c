@@ -39,5 +39,7 @@ t_wnd		*ft_init_window(void)
 	wnd->finishx = 2;
 	wnd->starty = 1;
 	wnd->finishy = -1;
+	wnd->len_x = wnd->finishx - wnd->startx;
+	wnd->len_y = wnd->starty - wnd->finishy;
 	return (wnd);
 }
